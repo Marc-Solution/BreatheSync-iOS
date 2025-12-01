@@ -10,128 +10,157 @@ import SwiftUI
 let backgroundColor = Color(hex: "F3FFFF")
 let buttonColor = Color(hex: "33E4DB")
 
+// NOTE: This file assumes the global constants (backgroundColor, buttonColor)
+// and the allMeditationConfigs array are available from other files.
+
 struct meditation1View: View {
-    @State private var isPlaying = false
+    
+    // 1. Configuration: Get the data for Box Breathing 4-4-4-4
+    private let config = allMeditationConfigs[0]
+    
+    // 2. StateObject: Initialize and manage the MeditationPlayer lifecycle
+    // This creates the single instance of the logic class for this view
+    @StateObject private var player: MeditationPlayer
+    
+    // Custom initializer to set up the StateObject with the correct configuration
+    init() {
+        let config = allMeditationConfigs[0]
+        // Initialize the player with the config data, ensuring setup runs once.
+        self._player = StateObject(wrappedValue: MeditationPlayer(config: config))
+    }
     
     var body: some View {
-        VStack {
-                  
-                  // Pushes content down slightly from the top
-                  Spacer()
-                      .frame(height: 50)
-                  
-                  // MARK: - Breathing Pattern Display
-                  VStack(alignment: .leading, spacing: 10) {
-                      
-                      Text("Breathing Pattern")
-                          .font(.largeTitle)
-                          .fontWeight(.bold)
-                          .foregroundStyle(buttonColor) // Use the same teal color
-                          .padding(.bottom, 20)
-                      
-                      // Use a Grid or HStack/VStack combo for the pattern times
-                      Grid(alignment: .leading, horizontalSpacing: 20) {
-                          GridRow {
-                              Text("Inhale").foregroundStyle(buttonColor)
-                              Text("-")
-                              Text("4")
-                          }
-                          GridRow {
-                              Text("Hold").foregroundStyle(buttonColor)
-                              Text("-")
-                              Text("4")
-                          }
-                          GridRow {
-                              Text("Exhale").foregroundStyle(buttonColor)
-                              Text("-")
-                              Text("4")
-                          }
-                          GridRow {
-                              Text("Hold").foregroundStyle(buttonColor)
-                              Text("-")
-                              Text("4")
-                          }
-                      }
-                      .font(.title2)
-                      
-                      Spacer() // Pushes the pattern up
-                  }
-                  .frame(maxWidth: .infinity, alignment: .leading)
-                  .padding(.horizontal, 40)
-                  
-                  // MARK: - Control Buttons
-                  VStack(spacing: 40) {
-                      HStack(spacing: 30) {
-                          
-                          // 1. Rewind 15 Seconds Button
-                          Button {
-                              // Action: rewind 15s (logic will go here)
-                          } label: {
-                              ZStack {
-                                  Circle()
-                                      .stroke(buttonColor, lineWidth: 2) // Thin teal border
-                                      .frame(width: 60, height: 60)
-                                  Image(systemName: "gobackward.15") // SF Symbol for rewind
-                                      .font(.title3)
-                                      .foregroundStyle(buttonColor)
-                              }
-                          }
-
-                          // 2. Play/Pause Button (The main control)
-                          Button {
-                              isPlaying.toggle() // Simple UI toggle for now
-                          } label: {
-                              Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                                  .font(.system(size: 40)) // Larger icon size
-                                  .frame(width: 80, height: 80) // Larger tap target
-                                  .background(buttonColor) // Solid teal background
-                                  .foregroundStyle(.white)
-                                  .clipShape(Circle())
-                                  .shadow(radius: 5) // Subtle shadow
-                          }
-
-                          // 3. Fast Forward 15 Seconds Button
-                          Button {
-                              // Action: fast forward 15s (logic will go here)
-                          } label: {
-                              ZStack {
-                                  Circle()
-                                      .stroke(buttonColor, lineWidth: 2) // Thin teal border
-                                      .frame(width: 60, height: 60)
-                                  Image(systemName: "goforward.15") // SF Symbol for fast-forward
-                                      .font(.title3)
-                                      .foregroundStyle(buttonColor)
-                              }
-                          }
-                      }
-                      
-                      // MARK: - Progress Bar and Timer
-                      VStack(spacing: 10) {
-                          // Placeholder for the progress bar (looks like a thin line in the image)
-                          Rectangle()
-                              .frame(height: 4)
-                              .foregroundStyle(buttonColor.opacity(0.5)) // Lighter teal color for the bar
-                              .padding(.horizontal, 30)
-                          
-                          // Timer text
-                          Text("00:00 / 03:52")
-                              .font(.callout)
-                              .foregroundStyle(.gray)
-                      }
-                      .padding(.bottom, 40) // Spacing from the bottom edge
-                  }
-                  
-              }
-              // Set the background for the entire view
-              .background(backgroundColor.ignoresSafeArea(.all))
-              
-              // Set the title for the system navigation bar
-              .navigationTitle("Box Breathing 4-4-4-4")
-              
-              // Ensure the title is always visible
-              .navigationBarTitleDisplayMode(.inline)
-    }
         
+        VStack {
+            
+            Spacer().frame(height: 50)
+            
+            // MARK: - Breathing Pattern Display
+            VStack(alignment: .leading, spacing: 10) {
+                
+                Text("Breathing Pattern")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundStyle(buttonColor)
+                    .padding(.bottom, 20)
+                
+                // Display the pattern using data from the config
+                Grid(alignment: .leading, horizontalSpacing: 20) {
+                    GridRow {
+                        Text("Inhale").foregroundStyle(buttonColor)
+                        Text("-")
+                        Text("\(config.inhaleDuration)")
+                    }
+                    if config.hold1Duration > 0 {
+                        GridRow {
+                            Text("Hold").foregroundStyle(buttonColor)
+                            Text("-")
+                            Text("\(config.hold1Duration)")
+                        }
+                    }
+                    GridRow {
+                        Text("Exhale").foregroundStyle(buttonColor)
+                        Text("-")
+                        Text("\(config.exhaleDuration)")
+                    }
+                    if config.hold2Duration > 0 {
+                        GridRow {
+                            Text("Hold").foregroundStyle(buttonColor)
+                            Text("-")
+                            Text("\(config.hold2Duration)")
+                        }
+                    }
+                }
+                .font(.title2)
+                
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 40)
+            
+            // MARK: - Control Buttons
+            VStack(spacing: 40) {
+                HStack(spacing: 30) {
+                    
+                    // 1. Rewind 15 Seconds Button
+                    Button {
+                        player.skip(seconds: -15) // Calls skip method on the player
+                    } label: {
+                        ControlCircle(symbol: "gobackward.15", color: buttonColor)
+                    }
+
+                    // 2. Play/Pause Button
+                    Button {
+                        player.togglePlayPause() // Toggles playback state
+                    } label: {
+                        Image(systemName: player.isPlaying ? "pause.fill" : "play.fill") // Dynamic icon
+                            .font(.system(size: 40))
+                            .frame(width: 80, height: 80)
+                            .background(buttonColor)
+                            .foregroundStyle(.white)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                    }
+
+                    // 3. Fast Forward 15 Seconds Button
+                    Button {
+                        player.skip(seconds: 15) // Calls skip method on the player
+                    } label: {
+                        ControlCircle(symbol: "goforward.15", color: buttonColor)
+                    }
+                }
+                
+                // MARK: - Progress Bar and Timer
+                VStack(spacing: 10) {
+                    
+                    // The Progress Bar (Dynamic)
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            // Background track
+                            Rectangle()
+                                .frame(width: geometry.size.width, height: 4)
+                                .foregroundStyle(buttonColor.opacity(0.3))
+                            
+                            // Foreground progress
+                            Rectangle()
+                                .frame(width: geometry.size.width * player.progress, height: 4) // Bound to player.progress
+                                .foregroundStyle(buttonColor)
+                                .animation(.linear(duration: 0.1), value: player.progress)
+                        }
+                    }
+                    .frame(height: 4)
+                    .padding(.horizontal, 30)
+                    
+                    // Timer text (Dynamic)
+                    Text("\(player.formattedTime(player.currentTime)) / \(player.formattedTotalDuration)")
+                        .font(.callout)
+                        .foregroundStyle(.gray)
+                }
+                .padding(.bottom, 40)
+            }
+            
+        }
+        .background(backgroundColor.ignoresSafeArea(.all))
+        .navigationTitle("\(config.name) \(config.patternString)")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// Reusable struct for the small control buttons
+struct ControlCircle: View {
+    let symbol: String
+    let color: Color
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(color, lineWidth: 2)
+                .frame(width: 60, height: 60)
+            Image(systemName: symbol)
+                .font(.title3)
+                .foregroundStyle(color)
+        }
+    }
 }
 
 #Preview {
