@@ -37,6 +37,7 @@ struct meditation3View: View {
                     .fontWeight(.bold)
                     .foregroundStyle(buttonColor)
                     .padding(.bottom, 20)
+                    .frame(maxWidth: .infinity)
                 
                 // Display the pattern using data from the config
                 Grid(alignment: .leading, horizontalSpacing: 20) {
@@ -45,31 +46,35 @@ struct meditation3View: View {
                         Text("-")
                         Text("\(config.inhaleDuration)")
                     }
+                    .foregroundStyle(buttonColor)
                     if config.hold1Duration > 0 {
                         GridRow {
                             Text("Hold").foregroundStyle(buttonColor)
                             Text("-")
                             Text("\(config.hold1Duration)")
                         }
+                        .foregroundStyle(buttonColor)
                     }
                     GridRow {
                         Text("Exhale").foregroundStyle(buttonColor)
                         Text("-")
                         Text("\(config.exhaleDuration)")
                     }
+                    .foregroundStyle(buttonColor)
                     if config.hold2Duration > 0 {
                         GridRow {
                             Text("Hold").foregroundStyle(buttonColor)
                             Text("-")
                             Text("\(config.hold2Duration)")
                         }
+                        .foregroundStyle(buttonColor)
                     }
                 }
-                .font(.title2)
-                
+                .font(.title)
+                .frame(maxWidth: .infinity)
                 Spacer()
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            //.frame(maxWidth: .infinity)
             .padding(.horizontal, 40)
             
             // MARK: - Control Buttons
