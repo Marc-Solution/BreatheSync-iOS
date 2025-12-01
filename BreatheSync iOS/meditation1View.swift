@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-let backgroundColor = Color(hex: "F3FFFF")
-let buttonColor = Color(hex: "33E4DB")
+let backgroundColor = Color(hex: "E0F7FA")
+let buttonColor = Color(hex: "00BBD3")
 
 // NOTE: This file assumes the global constants (backgroundColor, buttonColor)
 // and the allMeditationConfigs array are available from other files.
@@ -71,7 +71,7 @@ struct meditation1View: View {
                         }
                     }
                 }
-                .font(.title2)
+                .font(.title)
                 
                 Spacer()
             }

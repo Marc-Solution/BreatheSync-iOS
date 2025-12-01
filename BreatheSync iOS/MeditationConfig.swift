@@ -51,8 +51,8 @@ let allMeditationConfigs: [MeditationConfig] = [
         hold1Duration: 2,
         exhaleDuration: 8,
         hold2Duration: 0, // No second hold
-        totalDurationSeconds: 300, // 5 minutes
-        audioFileName: "box_628"
+        totalDurationSeconds: 248, // 04:08 minutes
+        audioFileName: "BreathingBox-6-2-8"
     ),
     MeditationConfig(
         name: "Flow Breathing",
@@ -60,8 +60,8 @@ let allMeditationConfigs: [MeditationConfig] = [
         hold1Duration: 0,
         exhaleDuration: 6,
         hold2Duration: 0,
-        totalDurationSeconds: 360, // 6 minutes
-        audioFileName: "flow_56"
+        totalDurationSeconds: 248, // 04:08 minutes
+        audioFileName: "BoxBreathing-5-6"
     ),
     MeditationConfig(
         name: "Flow Breathing",
@@ -69,7 +69,7 @@ let allMeditationConfigs: [MeditationConfig] = [
         hold1Duration: 0,
         exhaleDuration: 8,
         hold2Duration: 0,
-        totalDurationSeconds: 480, // 8 minutes
-        audioFileName: "flow_48"
+        totalDurationSeconds: 248, // 04:08 minutes
+        audioFileName: "BoxBreathing-4-8"
     )
 ]
