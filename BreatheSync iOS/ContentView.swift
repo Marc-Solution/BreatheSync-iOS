@@ -21,7 +21,6 @@ struct ContentView: View {
                 Text("BreatheSync")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    // Match the color from the image (or use the button color)
                     .foregroundStyle(buttonColor)
                 Spacer()
                 

@@ -2,7 +2,7 @@
 //  ColorCode.swift
 //  BreatheSync iOS
 //
-//  Created by Marco Deb on 2025-12-01.
+//  Created by Marco Deb on 2025-12-03.
 //
 
 import Foundation
@@ -35,3 +35,4 @@ extension Color {
         )
     }
 }
+
